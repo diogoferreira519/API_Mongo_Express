@@ -2,8 +2,16 @@ import mongoose from "mongoose";
 
 const autorSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId},
-    nome: {type: String, required: true},
-    nacionalidade: {type: String},
+    nome: {type: String, required: [true, "O nome do(a) autor(a) é obrigatório"],},
+    nacionalidade: {
+        type: String,
+        // validate: {
+        //     validator: (valor) => {
+        //         return valor.length() > 0 && valor.length() <=3;
+        //     },
+        //     message: "Nacionalidade deve conter 2 a 3 letras"
+        // }
+    }
 }, {versionKey: false});
 
 const autor = mongoose.model("autores", autorSchema);
