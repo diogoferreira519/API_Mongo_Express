@@ -9,7 +9,7 @@ routes.get('/', (req,res)=> {
 
 routes.get('/livros',LivroController.listarLivros);
 
-routes.get('/livros/busca',LivroController.buscaLivroByDesc);
+routes.get('/livros/busca',LivroController.buscaLivroPorFiltro);
 
 routes.get('/livros/:id', LivroController.livroById);
 

@@ -1,13 +1,13 @@
-import { livro } from "../models/index.js";
-import { autor } from "../models/index.js"
+import { autor, livro } from "../models/index.js";
 import NaoEncontrado from "../../Erros/NãoEncontrado.js";
 
 class LivroController {
     
     static async listarLivros(req, res, next) {
         try {
-            const listaLivros = await livro.find({});
-            res.status(200).json(listaLivros);
+            const buscaLivros = await livro.find();
+            req.resultado = buscaLivros;
+            next();
         }catch(erro) {
             next(erro);
         }
@@ -72,9 +72,32 @@ class LivroController {
         }
     }
     
-    static async buscaLivroByDesc(req, res, next) {
+    static async buscaLivroPorFiltro(req, res, next) {
         try {
-            const livroEncontrado = await livro.find({ titulo: req.query.titulo});
+            const { editora, titulo, minPaginas, maxPaginas, nomeAutor } = req.query;
+
+            const regex = new RegExp(titulo, "i");
+
+            console.log(regex);
+
+            let busca = {};
+
+            if (editora) busca.editora = editora;
+            if (titulo) busca.titulo = regex;
+            if (minPaginas && maxPaginas) busca.paginas = { $gte: minPaginas, $lte: maxPaginas};
+            if (minPaginas) busca.paginas = { $gte: minPaginas};
+            if (maxPaginas) busca.paginas = { $lte: maxPaginas};
+            if (nomeAutor) {
+                const autorEncontrado = await autor.findOne({ nome: nomeAutor});
+             
+                if (!autorEncontrado) {
+                    next(new NaoEncontrado('Descrição do autor não encontrada'));
+                }
+
+                busca.autor = autorEncontrado;
+            }
+            
+            const livroEncontrado = await livro.find(busca);
 
             if (!livroEncontrado) {
                 next(new NaoEncontrado('Descrição do livro não encontrada'));
