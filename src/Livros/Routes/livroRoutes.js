@@ -1,5 +1,6 @@
 import express from 'express';
 import LivroController from '../Controllers/LivroController.js';
+import paginacao from '../../middlewares/paginar.js';
 
 const routes = express.Router();
 
@@ -7,7 +8,7 @@ routes.get('/', (req,res)=> {
     res.status(200).send('opaaa');
 })
 
-routes.get('/livros',LivroController.listarLivros);
+routes.get('/livros',LivroController.listarLivros, paginacao);
 
 routes.get('/livros/busca',LivroController.buscaLivroPorFiltro);
 

@@ -5,7 +5,7 @@ class LivroController {
     
     static async listarLivros(req, res, next) {
         try {
-            const buscaLivros = await livro.find();
+            const buscaLivros = livro.find();
             req.resultado = buscaLivros;
             next();
         }catch(erro) {

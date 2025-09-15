@@ -1,4 +1,4 @@
-import NaoEncontrado from "../Erros/NãoEncontrado";
+import NaoEncontrado from "../Erros/NãoEncontrado.js";
 
 async function paginacao (req, res, next) {
     try {
@@ -6,7 +6,6 @@ async function paginacao (req, res, next) {
 
         limite = parseInt(limite);
         paginas = parseInt(paginas);
-        order = parseInt(order);
 
         let [orderField, order] = ordenacao.split(':');
 
@@ -19,7 +18,6 @@ async function paginacao (req, res, next) {
             .skip((paginas -1) * limite)
             .limit(limite)
             .exec();
-        
         if (!resultadoPaginado) {
             next(new NaoEncontrado('Não encontrado lista de registros'));
         }
